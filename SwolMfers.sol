@@ -23,7 +23,7 @@ contract SwolMfers is ERC721A, Ownable, Pausable {
     address public euniDaoAddress = 0x083FEd9c3A2AB4d2541c95652d2068A8a471716f; // EuniDao contract
     address public mferAddress = 0x79FCDEF22feeD20eDDacbB2587640e45491b757f; // Mfer contract
 
-    constructor() ERC721A("Swol Mfers", "IM") {
+    constructor() ERC721A("Swol Mfers", "SWOL") {
         setBaseURI("");
         _pause();
     }
@@ -68,16 +68,16 @@ contract SwolMfers is ERC721A, Ownable, Pausable {
         ERC721A mferToken = ERC721A(mferAddress);
         uint256 mferOwnedAmount = mferToken.balanceOf(msg.sender);
         // check Swol Mfer balance
-        uint256 imOwnedAmount = balanceOf(msg.sender);
+        uint256 swolOwnedAmount = balanceOf(msg.sender);
         require(
             euniOwnedAmount + mferOwnedAmount >= 1,
             "You don't own EuniDao or Mfers."
         );
         require(
-            amount + imOwnedAmount <= euniOwnedAmount + mferOwnedAmount,
+            amount + swolOwnedAmount <= euniOwnedAmount + mferOwnedAmount,
             "Not enough EuniDao and Mfers in wallet."
         );
-        require(imOwnedAmount + amount <= maxMint, "Max 20 Free.");
+        require(swolOwnedAmount + amount <= maxMint, "Max 20 Free.");
         require(
             totalSupply() + amount <= maxSwolMfers,
             "Not enough Swol Mfers remaining."
@@ -145,8 +145,8 @@ contract SwolMfers is ERC721A, Ownable, Pausable {
         uint256 euniOwnedAmount = euniToken.balanceOf(owner);
         ERC721A mferToken = ERC721A(mferAddress);
         uint256 mferOwnedAmount = mferToken.balanceOf(owner);
-        uint256 imOwnedAmount = balanceOf(owner);
-        return (euniOwnedAmount, mferOwnedAmount, imOwnedAmount);
+        uint256 swolOwnedAmount = balanceOf(owner);
+        return (euniOwnedAmount, mferOwnedAmount, swolOwnedAmount);
     }
 
     function tokensOfOwner(address _owner)
