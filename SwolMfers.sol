@@ -7,7 +7,14 @@ pragma solidity ^0.8.0;
 █████████████████ ▄▄█ ███ █▀▄▄▀█ ████ ▄▀▄ █ ▄▄█ ▄▄█ ▄▄▀█ ▄▄██████████████
 █████████████████▄▄▀█▄▀ ▀▄█ ██ █ ████ █▄█ █ ▄██ ▄▄█ ▀▀▄█▄▄▀██████████████
 █████████████████▄▄▄██▄█▄███▄▄██▄▄███▄███▄█▄███▄▄▄█▄█▄▄█▄▄▄██████████████
-▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀                                                 
+▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀            
+by @swolidity
+
+artwork by @hal3zthatbitch & @quincypop1
+
+special thanks to @donkey_brained
+
+For Landon & Zane.                                      
 */
 
 import "./ERC721A.sol";
@@ -23,7 +30,7 @@ contract SwolMfers is ERC721A, Ownable, Pausable {
     address public euniDaoAddress = 0x083FEd9c3A2AB4d2541c95652d2068A8a471716f; // EuniDao contract
     address public mferAddress = 0x79FCDEF22feeD20eDDacbB2587640e45491b757f; // Mfer contract
 
-    constructor() ERC721A("Swol Mfers", "SWOL") {
+    constructor() ERC721A("Swol Mfers", "SM") {
         setBaseURI("");
         _pause();
     }
@@ -109,7 +116,16 @@ contract SwolMfers is ERC721A, Ownable, Pausable {
         maxSwolMfers = _newMaxSupply;
     }
 
-    function withdraw() public onlyOwner {
+    function withdraw() public onlyOwner nonReentrant {
+        uint256 total = address(this).balance;
+        Address.sendValue(
+            payable(0x294cB3785d0A3E7A6F1Cea6ebc449293D790c33F),
+            (total * 3333) / 10000
+        );
+        Address.sendValue(
+            payable(0x77f95EEB1CE65F44178e1faBC8726A010dB0Ef9E),
+            (total * 3333) / 10000
+        );
         payable(msg.sender).transfer(address(this).balance);
     }
 
