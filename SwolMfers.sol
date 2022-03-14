@@ -116,8 +116,9 @@ contract SwolMfers is ERC721A, Ownable, Pausable {
         maxSwolMfers = _newMaxSupply;
     }
 
-    function withdraw() public onlyOwner nonReentrant {
+    function withdraw() public onlyOwner {
         uint256 total = address(this).balance;
+
         Address.sendValue(
             payable(0x294cB3785d0A3E7A6F1Cea6ebc449293D790c33F),
             (total * 3333) / 10000
@@ -126,6 +127,7 @@ contract SwolMfers is ERC721A, Ownable, Pausable {
             payable(0x77f95EEB1CE65F44178e1faBC8726A010dB0Ef9E),
             (total * 3333) / 10000
         );
+
         payable(msg.sender).transfer(address(this).balance);
     }
 
