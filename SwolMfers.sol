@@ -28,6 +28,7 @@ contract SwolMfers is ERC721A, Ownable, Pausable {
     string public baseURI;
 
     address public euniDaoAddress = 0x083FEd9c3A2AB4d2541c95652d2068A8a471716f; // EuniDao contract
+    address public sabcAddress = 0xaDC28cac9c1d53cC7457b11CC9423903dc09DDDc; // Sketchy Ape Book Club contract
     address public mferAddress = 0x79FCDEF22feeD20eDDacbB2587640e45491b757f; // Mfer contract
 
     constructor() ERC721A("Swol Mfers", "SM") {
@@ -41,53 +42,57 @@ contract SwolMfers is ERC721A, Ownable, Pausable {
 
     function mint(uint256 amount) external payable whenNotPaused {
         /**
-         * @notice If you hold EuniDao or Mfers, you are eligible for up to 20 FREE mints.
+         * @notice If you hold EuniDao, Sketchy Ape Book Club, or Mfers, you are eligible for up to 20 FREE mints.
          * MINT THOSE FIRST as the freeMint function checks your Swol Mfer balance and will not
          * allow more than 20 NFTs in your wallet whether you minted them free or not.
          * No refunds will be given for messing this up.
          */
         require(
             msg.value >= mintPrice * amount,
-            "Not enough ETH for purchase."
+            "Not enough ETH for purchase mfer."
         );
-        require(amount <= maxMint, "Save some for the rest of us.");
+        require(amount <= maxMint, "Save some for the rest of us mfer.");
         require(
             totalSupply() + amount <= maxSwolMfers,
-            "Not enough Swol Mfers remaining."
+            "Not enough swol mfers remaining."
         );
         _safeMint(msg.sender, amount);
     }
 
     function freeMint(uint256 amount) external payable whenNotPaused {
         /**
-         * @notice If you hold EuniDao or Mfers, you are eligible for up to 20 FREE mints.
+         * @notice If you hold EuniDao,  Sketchy Ape Book Club, or Mfers, you are eligible for up to 20 FREE mints.
          * MINT THESE FIRST as the freeMint function checks your Swol Mfer balance and will not
          * allow more than 20 NFTs in your wallet whether you minted them free or not.
          * No refunds will be given for messing this up.
-         * @param amount The total of your EuniDao and Mfer counts up to 20. Use checkTokenCounts
+         * @param amount The total of your EuniDao,  Sketchy Ape Book Club, and Mfer counts up to 20. Use checkTokenCounts
          * to confirm before minting.
          */
 
         // check EuniDao balance
         ERC721A euniToken = ERC721A(euniDaoAddress);
         uint256 euniOwnedAmount = euniToken.balanceOf(msg.sender);
+        // check SABC balance
+        ERC721A sabcToken = ERC721A(sabcAddress);
+        uint256 sabcOwnedAmount = sabcToken.balanceOf(msg.sender);
         // check Mfer balance
         ERC721A mferToken = ERC721A(mferAddress);
         uint256 mferOwnedAmount = mferToken.balanceOf(msg.sender);
         // check Swol Mfer balance
         uint256 swolOwnedAmount = balanceOf(msg.sender);
         require(
-            euniOwnedAmount + mferOwnedAmount >= 1,
-            "You don't own EuniDao or Mfers."
+            euniOwnedAmount + sabcOwnedAmount + mferOwnedAmount >= 1,
+            "You don't own EuniDao, Sketchy Apes, or Mfers."
         );
         require(
-            amount + swolOwnedAmount <= euniOwnedAmount + mferOwnedAmount,
-            "Not enough EuniDao and Mfers in wallet."
+            amount + swolOwnedAmount <=
+                euniOwnedAmount + sabcOwnedAmount + mferOwnedAmount,
+            "Not enough EuniDao, Sketchy Apes, and Mfers in wallet."
         );
         require(swolOwnedAmount + amount <= maxMint, "Max 20 Free.");
         require(
             totalSupply() + amount <= maxSwolMfers,
-            "Not enough Swol Mfers remaining."
+            "Not enough swol mfers remaining."
         );
         _safeMint(msg.sender, amount);
     }
@@ -95,7 +100,7 @@ contract SwolMfers is ERC721A, Ownable, Pausable {
     function devMint(address to, uint256 amount) external onlyOwner {
         require(
             totalSupply() + amount <= maxSwolMfers,
-            "Not enough Swol Mfers remaining."
+            "Not enough swol mfers remaining."
         );
         _safeMint(to, amount);
     }
