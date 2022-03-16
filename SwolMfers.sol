@@ -31,7 +31,7 @@ contract SwolMfers is ERC721A, Ownable, Pausable {
     address public sabcAddress = 0xaDC28cac9c1d53cC7457b11CC9423903dc09DDDc; // Sketchy Ape Book Club contract
     address public mferAddress = 0x79FCDEF22feeD20eDDacbB2587640e45491b757f; // Mfer contract
 
-    constructor() ERC721A("Swol Mfers", "SMFER") {
+    constructor() ERC721A("swol mfers", "SMFER") {
         setBaseURI("");
         _pause();
     }
