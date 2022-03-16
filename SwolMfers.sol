@@ -170,7 +170,14 @@ contract SwolMfers is ERC721A, Ownable, Pausable {
         ERC721A mferToken = ERC721A(mferAddress);
         uint256 mferOwnedAmount = mferToken.balanceOf(owner);
         uint256 swolOwnedAmount = balanceOf(owner);
-        return (euniOwnedAmount, mferOwnedAmount, swolOwnedAmount, sabcCount);
+        ERC721A sabcToken = ERC721A(sabcAddress);
+        uint256 sabcOwnedAmount = sabcToken.balanceOf(owner);
+        return (
+            euniOwnedAmount,
+            mferOwnedAmount,
+            swolOwnedAmount,
+            sabcOwnedAmount
+        );
     }
 
     function tokensOfOwner(address _owner)
